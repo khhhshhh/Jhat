@@ -1,0 +1,42 @@
+extends layout
+block head
+    link(type='text/css', rel='stylesheet', href='/css/info.css')
+    link(type='text/css', rel='stylesheet', href='/css/button.css')
+    link(type='text/css', rel='stylesheet', href='/css/form.css')
+    link(type='text/css', rel='stylesheet', href='/css/profileUpdate.css')
+
+block content
+    if user
+        div#content
+            form#profileUpdate.form(action='/profileUpdate', method='POST')
+                div.input-group
+                    label Name
+                    input.radius(type='text', name='name', value=user.name)
+                div.input-group
+                    label NickName
+                    input.radius(type='text', name='nickname', value=user.nickname || '')
+                div.input-group
+                    label Age
+                    input.radius(type='number', name='age', value=user.age || '')
+                div.input-group
+                    label Gender
+                    select.radius(name='gender')
+                        if user.gender == 'female'
+                            option(value='female', selected='selected') Female 
+                            option(value='male') Male 
+                        else
+                            option(value='female') Female 
+                            option(value='male', selected='selected') Male 
+                div.input-group
+                    label Email
+                    input.radius(type='email', value=user.email || '', name='email')
+                div.input-group
+                    label Profile
+                    textarea.radius(name='profile')=user.profile 
+                div#button.input-group
+                    button Save
+    else 
+        div.info-hero
+            | Sorry, please signin first.
+
+block script

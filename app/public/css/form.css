@@ -1,0 +1,31 @@
+.input-group {
+	min-height:50px;
+	overflow:hidden;
+}
+.input-group label { 
+	display:inline-block;
+	text-align:right;
+	width:150px;
+	padding-right:10px;
+	font-size:18px;
+	font-weight:lighter;
+	color:#888;
+	vertical-align:top;
+	line-height:30px;
+}
+.input-group input.radius, 
+.input-group textarea.radius, 
+.input-group select.radius {
+	height:24px;
+	padding:2px 5px;
+	width:200px;
+	border: 1px solid #E4E4E4;
+}
+.input-group textarea.radius {
+	min-width:300px;
+	min-height:200px;
+}
+.input-group button {
+	width:80px;
+	height:35px;
+}

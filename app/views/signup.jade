@@ -1,0 +1,32 @@
+extends ./signLayout
+block left
+    h1 Jhat 
+    div#sub.gray Easy to chat with you. 
+    ul#users 
+        -users.forEach(function(user) {
+        li.user: = JSON.stringify(user)
+            button(_id='#{user._id}').delete delete 
+        -});
+block right
+    form#form(method='POST', action='/create') 
+        div.input-group
+            label Name: 
+            input.radius(type='text', name='name')
+        div.input-group
+            label Password: 
+            input.radius(type='password', name='password')
+        div.input-group
+            label Verify: 
+            input.radius(type='password')
+        div.input-group
+            label Email: 
+            input.radius(type='email', name='email')
+        div.input-group
+            button#submit.pull-right.margin-right-190(type='submit') 提交
+script(type='text/javascript', src='/js/mongoose.js');
+
+block footer
+    div#footer
+
+block script
+    script(type='text/javascript', src='/js/mongoose.js');

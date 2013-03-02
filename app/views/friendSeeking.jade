@@ -1,0 +1,15 @@
+extends layout
+
+block head
+
+block content
+    ul
+    -users.forEach(function(user) {
+        li=user 
+            button.add(value=user._id) add friend
+            br
+            br
+    -});
+
+block script
+    script(type='text/javascript', src='/js/friendSeeking.js')

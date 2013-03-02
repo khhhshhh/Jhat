@@ -1,0 +1,15 @@
+extends layout
+
+block head
+
+block content
+    ul
+    -friends.forEach(function(friend) {
+        li=friend 
+            button.remove(value=friend._id) remove friend
+            br
+            br
+    -});
+
+block script
+    script(type='text/javascript', src='/js/friendsList.js')

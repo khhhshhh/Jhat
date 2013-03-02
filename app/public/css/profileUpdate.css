@@ -1,0 +1,12 @@
+#button {
+	width:240px;
+}
+#button button {
+	float:right;
+	margin-top:20px;
+}
+#profileUpdate {
+	padding-top:35px;
+	width:500px;
+	margin:0px auto;
+}

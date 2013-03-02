@@ -1,0 +1,7 @@
+#button {
+	width:410px;
+}
+#button button {
+	float:right;
+	margin-top:20px;
+}

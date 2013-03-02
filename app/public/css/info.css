@@ -1,0 +1,30 @@
+.info {
+	overflow:hidden;
+}
+.info .info-item {
+	width: 500px;
+	margin-bottom:15px;
+	overflow:hidden;
+}
+
+.info .title {
+	width:150px;
+	float:left;
+	margin-right:30px;
+	color:#ccc;
+	text-align:right;
+	font-size:18px;
+}
+.info .content {
+	word-wrap:break-word;
+	width:315px;
+	font-size:18px;
+	float:left;
+}
+
+.info-hero {
+	text-align:center;
+	padding:20px;
+	font-size:50px;
+	color:#e2e2e2;
+}

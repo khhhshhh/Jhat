@@ -1,0 +1,38 @@
+h1 {
+	font-size:80px;
+	padding:0px;
+	margin-bottom:-5px;
+}
+
+input.radius, 
+textarea.radius {
+	border:1px solid #e4e4e4;
+}
+
+#wrapper {
+	width:1000px;
+	margin:10% auto;
+}
+
+#right {
+	width:500px;
+	float:left;
+	margin-left:80px;
+}
+
+#left {
+	width:400px;
+	height:235px;
+	border-right:1px solid #e9e9e9;
+	float:left;
+	padding-left:10px;
+}
+
+#sub {
+	margin-bottom:20px;
+}
+
+li.user {
+	margin-bottom:20px;
+}
+

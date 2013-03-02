@@ -1,0 +1,35 @@
+extends layout
+block head
+    link(type='text/css', rel='stylesheet', href='/css/info.css')
+    link(type='text/css', rel='stylesheet', href='/css/button.css')
+    link(type='text/css', rel='stylesheet', href='/css/profile.css')
+
+block content
+    if user
+        div#content
+            div#profile.info
+                div.info-item
+                    div.title Name
+                    div.content #{user.name} ( 
+                        a(href='/passwordUpdate') change password )
+                div.info-item
+                    div.title Nickname
+                    div.content=user.nickname || 'Not filled'
+                div.info-item
+                    div.title Age
+                    div.content=user.age || 'Not filled'
+                div.info-item
+                    div.title Gender
+                    div.content=user.gender || 'Not filled'
+                div.info-item
+                    div.title Email
+                    div.content=user.email || 'Not filled'
+                div.info-item
+                    div.title Profile
+                    div.content=user.profile || 'Not filled'
+            div#button: a.button-link(href='/profileUpdate'): button.button Update
+    else 
+        div.info-hero
+            | Sorry, please signin first.
+
+block script

@@ -1,0 +1,35 @@
+doctype 5
+html
+  head
+    title Jhat
+    meta(charset='utf-8') 
+    link(rel='stylesheet', href='/css/structure.css')
+    link(rel='stylesheet', href='/css/layout.css')
+    script(type='text/javascript', src='/js/jquery.js')
+    block head
+  body
+      div#nav
+          h1 
+            a.head(href='/') Jhat
+            span.gray Easy to chat with you
+            ul.slide.radius
+                if user
+                    li.title: a(href='/') #{user.name}
+                    li.item.fashion.first: a(href='/profile') Profile
+                    li.item.fashion.last: a(href='/signout') Signout
+                else 
+                    li.title: a(href='/signin') Signin
+            ul.nav 
+                if user
+                    li: a(href='/friendSeeking') seek
+                    li: a(href='/friendsList') friends
+      div#wrapper.radius  
+          if user
+              block content
+          else   
+              h2 Sorry, please signin first.
+      div#footer  
+         | Author: @
+         a(href='http://weibo.com/khhhshhh?wvr=5&') khhhshhh 
+  script(type='text/javascript', src='/js/layout.js')
+  block script  

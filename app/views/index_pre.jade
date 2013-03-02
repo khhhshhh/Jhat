@@ -1,0 +1,19 @@
+doctype 5
+html
+    head
+        script(type='text/javascript', src='/js/jquery.js')
+        link(type='text/css', rel='stylesheet', href='/css/structure.css');
+        link(type='text/css', rel='stylesheet', href='/css/style.css');
+        link(type='text/css', rel='stylesheet', href='/css/form.css');
+    body
+        div#wrapper
+            h1 Jhat 
+            div#sub.gray Easy to chat with you. 
+            div#nav
+                if user 
+                    ul#nav
+                        li: a(href='/profile') #{user.name}
+                        li: a(href='/signout') Signout
+                else 
+                    | Please <a href='/signin'>Signin</a> first.
+    script(type='text/javascript', src='/js/mongoose.js');
