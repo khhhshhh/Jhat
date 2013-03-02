@@ -34,39 +34,8 @@ app.configure(function(){
 
 });
 
-app.get('/', routes.index);
-
-app.get('/layout', routes.layout);
-
-app.get('/signup', routes.signup);
-
-app.get('/profile', routes.profile);
-
-app.get('/profileUpdate', routes.profileUpdate);
-
-app.post('/profileUpdate', user.profileUpdate);
-
-app.get('/signin', routes.signin);
-
-app.post('/signin', user.signin);
-
-app.get('/signout', routes.signout);
-
-app.post('/userCreate', user.create);
-
-app.post('/userRemove', user.remove);
-
-app.get('/passwordUpdate', routes.passwordUpdate);
-
-app.post('/passwordUpdate', user.passwordUpdate);
-
-app.get('/friendSeeking', routes.friendSeeking);
-
-app.post('/addFriend', user.addFriend);
-
-app.get('/friendsList', routes.friendsList);
-
-app.post('/removeFriend', user.removeFriend);
+routes(app);
+user(app);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
