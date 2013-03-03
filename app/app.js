@@ -1,6 +1,7 @@
 var express = require('express')
   , MongoStore = require('connect-mongo')(express)
   , routes = require('./routes')
+  , jhat = require('./routes/jhat')
   , user = require('./routes/user')
   , http = require('http')
   , mongoose = require('mongoose')
@@ -34,8 +35,14 @@ app.configure(function(){
 
 });
 
+/*Router of navigation*/
 routes(app);
+
+/*Router of user's Ajax */
 user(app);
+
+/*Router of jhat's main chating capility*/
+jhat(app);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
