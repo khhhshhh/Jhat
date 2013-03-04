@@ -8,7 +8,7 @@ block head
 block content
     if user
         div#content
-            form#profileUpdate.form(action='/profileUpdate', method='POST')
+            form#profileUpdate.form(action='/profileUpdate', method='POST', enctype='multipart/form-data')
                 div.input-group
                     label Name
                     input.radius(type='text', name='name', value=user.name)
@@ -33,6 +33,9 @@ block content
                 div.input-group
                     label Profile
                     textarea.radius(name='profile')=user.profile 
+                div.input-group
+                    label Avatar
+                    input.radius(name='avatar', type='file')
                 div#button.input-group
                     button Save
     else 

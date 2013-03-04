@@ -8,10 +8,13 @@ block content
     if user
         div#content
             div#profile.info
+                div#avatar.info-itme
+                    img.radius(src='/img/avatar/' + user._id + user.extName, alt='Avatar')
+                    span.name=user.name
                 div.info-item
                     div.title Name
-                    div.content #{user.name} ( 
-                        a(href='/passwordUpdate') change password )
+                    div.content #{user.name} 
+                        a(href='/passwordUpdate') change password
                 div.info-item
                     div.title Nickname
                     div.content=user.nickname || 'Not filled'

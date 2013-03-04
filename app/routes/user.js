@@ -1,4 +1,6 @@
 var User = require('../models/user');
+var fs = require('fs');
+var path = require('path');
 var crypto = require('crypto');
 var user = {};
 
@@ -42,20 +44,89 @@ module.exports =  function(app) {
 			var body = req.body;
 			var user = req.session.user;
 
-			User.findByIdAndUpdate(user._id, {
-				name: body.name
-				,nickname: body.nickname
-				,email: body.email
-				,gender: body.gender
-				,age: body.age
-				,profile: body.profile
-			}, function(err, newUser){
-				if(err) res.send('Error');
-				else {
-					req.session.user = newUser; 
-					res.redirect('/profile');
-				}
-			});
+			var avatar = req.files.avatar;
+			var tmpFile = avatar.path;
+			var extName = path.extname(avatar.name);
+			var avatarDir = path.join(__dirname, '../public/img/avatar'); 
+			var targetFile = path.join(avatarDir, user._id + extName);
+
+			var extList = ['.jpg', '.png', '.gif'];
+
+			var size = avatar.size;
+
+			/*check if a string is in a list*/
+			function isIn(ext, arr) {
+				for(var i = 0, len = arr.length; i < len; i++) {
+					if(arr[i] == ext) return true;
+				};
+				return false;
+			};
+
+			/*Check if the extName & size of file are ligal 
+			 * type must be : jpg, png, gif
+			 * size must be : <= 2MB 
+			 * */
+			if(isIn(extName, extList) && size <= 102400) {
+				var prevAvatar = path.join(avatarDir, user._id + user.extName);
+				fs.exists(prevAvatar, function(exists) { 
+					if(exists) {
+						fs.unlink(prevAvatar, function(err) { //delete previous avatar
+							if(err) console.log('Remove avatar error');
+							else updateFile(updateInfo); 						
+						});
+					} else {
+						updateFile(updateInfo);					
+					}
+				});
+			} else {
+				console.log('File error' + isIn(extName, extList) + size); 
+				res.send('File error'); // else send an error message
+			}
+
+			/*Upload file handler*/
+			function updateFile(cb) {
+				fs.rename(tmpFile, targetFile, function(err) {
+					if(err) {
+						console.log('Rename upload file error');
+						console.log(targetFile);
+						res.send(err);
+					}
+					else {
+						fs.exists(tmpFile, function(exists) {
+							if(exists) {
+								fs.unlink(tmpFile, function(err) {
+									if(err) {
+										console.log('Unlink file error');
+										res.send(err);
+									}
+									else cb();
+								});
+							} else {
+								cb();
+							}
+						});
+					}
+				});
+			}
+
+			function updateInfo() {
+				User.findByIdAndUpdate(user._id, {
+					name: body.name
+					,nickname: body.nickname
+					,email: body.email
+					,gender: body.gender
+					,age: body.age
+					,profile: body.profile
+					,extName: extName
+				}, function(err, newUser){
+					if(err) res.send('Error');
+					else {
+						req.session.user = newUser; 
+						res.redirect('/profile');
+					}
+				});
+			}
+
 		} else {
 			res.redirect('/signin');
 		}

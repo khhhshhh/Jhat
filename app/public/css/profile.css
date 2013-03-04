@@ -1,5 +1,5 @@
 div#content {
-	width:500px;
+	width:700px;
 	margin:0 auto;
 	padding-top:30px;
 }
@@ -7,4 +7,22 @@ div#content {
 #button {
 	margin:10px auto;
 	width:200px;
+}
+
+#avatar {
+	width: 120px;
+	height: 200px;
+	float: left;
+	text-align:center;
+}
+#avatar img {
+	width: 120px;
+	border:1px solid #ccc;
+}
+#avatar span.name {
+	font-size:14px;
+}
+
+a {
+	font-size:12px;
 }

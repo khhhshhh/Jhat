@@ -1,4 +1,5 @@
 (function() {
+
 	/*deal with / without jQuery*/
 	var $ = null;
 	if(jQuery) {

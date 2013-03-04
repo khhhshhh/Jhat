@@ -20,7 +20,11 @@ app.configure(function(){
   app.use(express.favicon());
   app.use(express.logger('dev'));
 
-  app.use(express.bodyParser());
+  app.use(express.bodyParser({
+	  /*Upload files settings*/
+	  //uploadDir: __dirname + '/public/upload_tmp/',
+  }));
+
   app.use(express.methodOverride());
   app.use(express.cookieParser());
 
@@ -30,6 +34,7 @@ app.configure(function(){
 		  url: settings.url + '/admin/sessions',
 	  })
   }));
+
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 
