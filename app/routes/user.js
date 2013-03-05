@@ -117,7 +117,7 @@ module.exports =  function(app) {
 					,gender: body.gender
 					,age: body.age
 					,profile: body.profile
-					,extName: extName
+					,extName: extName 
 				}, function(err, newUser){
 					if(err) res.send('Error');
 					else {

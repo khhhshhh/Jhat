@@ -16,11 +16,14 @@ div#content {
 	text-align:center;
 }
 #avatar img {
+	margin-top: 30px;
+	margin-bottom: 10px;
 	width: 120px;
 	border:1px solid #ccc;
 }
 #avatar span.name {
 	font-size:14px;
+	font-weight:bold;
 }
 
 a {

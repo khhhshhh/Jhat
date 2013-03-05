@@ -29,3 +29,6 @@
 	width:80px;
 	height:35px;
 }
+.input-group input[type='file'] {
+	border: none;
+}
