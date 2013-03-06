@@ -1,0 +1,22 @@
+div#jhat-box.jhat-radius.jhat-transparent
+    div#jhat-header.jhat-bg
+        div#jhat-banner
+            span Jhat
+            ul.jhat-icon.jhat-tr-radius
+                li.jhat-icon-item.jhat-icon-hide
+        div#jhat-sum
+            img.jhat-avatar-large(src='/img/avatar/#{user._id}#{user.extName}')
+            div#jhat-sum-inner
+                div#jhat-nickname=user.name 
+                    span.jhat-status
+                    input#jhat-signature(value='#{user.signature || ''}')
+
+    div#jhat-list-content
+        ul#jhat-contact-list
+            -friends.forEach(function(friend) {
+                li.jhat-contact-item.jhat-radius(_id='#{friend._id}')
+                    img.jhat-contact-avatar(src='/img/avatar/#{friend._id}#{friend.extName}')
+                    span.jhat-contact-name: a #{friend.name}
+            -});
+
+div.jhat-show.jhat-transparent.jhat-tl-radius.jhat-bl-radius.jhat-transtion

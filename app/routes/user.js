@@ -54,6 +54,7 @@ module.exports =  function(app) {
 
 			var size = avatar.size;
 
+
 			/*check if a string is in a list*/
 			function isIn(ext, arr) {
 				for(var i = 0, len = arr.length; i < len; i++) {
@@ -62,11 +63,14 @@ module.exports =  function(app) {
 				return false;
 			};
 
-			/*Check if the extName & size of file are ligal 
-			 * type must be : jpg, png, gif
-			 * size must be : <= 2MB 
-			 * */
-			if(isIn(extName, extList) && size <= 102400) {
+			if(avatar.name == '') { // if the user has not upload a picture
+				extName = user.extName;
+				updateInfo();
+			} else if(isIn(extName, extList) && size <= 102400) {
+				/*Check if the extName & size of file are ligal 
+				 * type must be : jpg, png, gif
+				 * size must be : <= 2MB 
+				 * */
 				var prevAvatar = path.join(avatarDir, user._id + user.extName);
 				fs.exists(prevAvatar, function(exists) { 
 					if(exists) {

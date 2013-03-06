@@ -18,7 +18,7 @@
 		host: 'http://localhost',
 		port: ':8080',
 		style: '/jhat/css/jhat.css',
-		template: '/jhat/templates/jhat.html'
+		template: /*'/jhat/templates/jhat.html'*/ '/jhat/loadTemplate'
 	};
 
 	/*global variables*/
