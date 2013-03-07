@@ -219,4 +219,17 @@ module.exports =  function(app) {
 	app.post('/addFriend', user.addFriend);
 
 	app.post('/removeFriend', user.removeFriend);
+
+	app.post('/changeSignature', function(req, res) {
+		var user = req.session.user;
+		var signature = req.body.signature;
+		User.findByIdAndUpdate(user._id, {$set: {signature: signature}}, function(err, doc) {
+			if(err) {
+				res.send('Change failed');
+			} else {
+				req.session.user = doc;
+				res.send('OK');
+			}
+		});
+	});
 };

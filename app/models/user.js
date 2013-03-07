@@ -22,6 +22,7 @@ var user = Schema({
 	, email: String
 	, friends: Array
 	, extName: String
+	, signature: String
 });
 
 // 通过用户名可以找到用户

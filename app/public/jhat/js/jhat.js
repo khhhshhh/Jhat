@@ -3,7 +3,7 @@
 	/*deal with / without jQuery*/
 	var $ = null;
 	if(jQuery) {
-	    $ = jQuery;
+		$ = jQuery;
 	} else {
 		$ = function(selector) {
 		};
@@ -18,7 +18,10 @@
 		host: 'http://localhost',
 		port: ':8080',
 		style: '/jhat/css/jhat.css',
-		template: /*'/jhat/templates/jhat.html'*/ '/jhat/loadTemplate'
+		template: /*'/jhat/templates/jhat.html'*/ '/jhat/loadTemplate',
+	};
+	config.url = function() {
+		return this.host + this.port;
 	};
 
 	/*global variables*/
@@ -37,7 +40,7 @@
 
 	/*Load template*/
 	$.ajax({
-		url: config.host + config.port + config.template,
+		url: config.ur() + config.template,
 		type: 'GET',
 		dateType: 'text/html',
 		success: function(data) {
@@ -52,6 +55,30 @@
 
 	function init() {
 		widget();
+	};
+
+	/*Side widget*/
+	function Side() {};
+	Side.fn = Side.prototype;
+	Side.fn = {
+		contructor: 'Side',
+		init: function(){},  
+		$dom: null,
+		show: function(speed) {
+			var speed = speed || 200;
+			this.$dom.animate({
+				right: '5px'
+			}, speed);
+		},
+		hide: function(speed) {
+			var speed = speed || 200;
+			this.$dom.animate({
+				right: '-45px'
+			}, speed);
+		},
+		destory: function() {
+			this.$dom.remove();
+		}
 	};
 
 	function widget() {
@@ -70,6 +97,9 @@
 				$(this).animate({
 					right: '-45px'
 				}, speed);
+			},
+			destory: function() {
+				$(this).remove();
 			}
 		});
 
@@ -83,6 +113,9 @@
 				$(this).animate({
 					right: '-245px'
 				}, speed);
+			},
+			destory: function() {
+				$(this).remove();
 			}
 		});
 
@@ -91,12 +124,32 @@
 			$show.disappear();
 		});
 
+		$box.find('#jhat-signature').on('blur', function(event) {
+			var $this = $(this);
+			var signature = $this.val();
+
+			$this.attr('');
+
+			$.ajax({
+				url: config.url() + '/changeSignature',
+				type: 'POST',
+				data: 'signature=' + signature,
+				success: function(data) {
+					if(data !== 'OK') {
+						alert(data);
+					}
+				},
+				error: function(err) {
+					alert('Server error');
+				} 
+			});
+		});
+
 		$hide.on('click', function(event) {
 			$box.disappear();
 			$show.display();
 		});
 
 		$show.click();
-		
 	};
 })();
