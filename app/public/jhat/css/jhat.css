@@ -1,5 +1,7 @@
-/*Jhat 's style*/
+/* Jhat 's style */
 
+/* Golbal jhat style settings 
+ * -------------------------------------------------------------*/
 *[id^='jhat-'] ,
 *[class^='jhat-'] {
 	padding: 0px;
@@ -30,6 +32,9 @@
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
 }
 
+/*
+ * Jhat's radius 
+ * ----------------------------------------------------------------------------*/
 .jhat-radius {
 	border-radius: 6px;
 	-webkit-border-radius: 6px;
@@ -212,4 +217,8 @@ li.jhat-contact-item:hover {
 .jhat-contact-name  a{
 	font-size:12px;
 	width: 100%;
+}
+
+.jhat-widget {
+	display: none;
 }

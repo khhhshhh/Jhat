@@ -1,9 +1,11 @@
+/*Jhat's Side box*/
 div#jhat-box.jhat-radius.jhat-transparent
     div#jhat-header.jhat-bg
         div#jhat-banner
             span Jhat
             ul.jhat-icon.jhat-tr-radius
                 li.jhat-icon-item.jhat-icon-hide
+
         div#jhat-sum
             img.jhat-avatar-large(src='/img/avatar/#{user._id}#{user.extName}')
             div#jhat-sum-inner
@@ -19,4 +21,11 @@ div#jhat-box.jhat-radius.jhat-transparent
                     span.jhat-contact-name: a #{friend.name}
             -});
 
+/* A button for showing the box*/
 div.jhat-show.jhat-transparent.jhat-tl-radius.jhat-bl-radius.jhat-transtion
+/* Message dialogue, to chat with a firend, for displaying the message */
+/* and typing message*/
+div.jhat-dialogue
+    div.jhat-display
+        textarea
+    div.jhat-controls
