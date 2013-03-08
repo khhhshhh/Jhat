@@ -50,7 +50,7 @@
 		dateType: 'text/html',
 		success: function(data) {
 			$template = $(data);
-			$dialogue = $template.filter('div.jhat-dialogue');
+			$dialogue = $template.find('div.jhat-dialogue');
 			init();
 		},  
 		error: function(err) {
@@ -97,17 +97,18 @@
 	})(); 
 
 	/*Dialogue module, inherit from Widget*/
-	var Dialogue = function(friend) {
+	var Dialogue = (function(currendFriend) {
 		var dialogue  = Widget($dialogue.clone(true)); 
-		return dialogue.extend({
-			currendFriend: friend
-		});
-	};
+		return function() {
+			return dialogue.extend({
+				currendFriend: friend
+			});
+		};
+	});
 
 	function init() {
 		widget();
 		var newDialogue = Dialogue();
-		newDialogue.show();
 	};
 
 	function widget() {
