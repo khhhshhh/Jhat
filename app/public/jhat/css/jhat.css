@@ -13,8 +13,6 @@
 .jhat-bg {
 	z-index: 1;
 	height: 80px;
-	padding-right: 20px;
-	padding-left: 20px;
 	background-color: #fafafa;
 	background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
@@ -79,8 +77,9 @@
 	-moz-box-shadow: 0 0 25px 0px #ccc;
 	background-color: transparent;
 }
-
-#jhat-box {
+/* Jhat's components
+ * --------------------------------------------------------------------------*/
+div.jhat-box {
 	z-index: 99998;
 	position:fixed;
 	top: 2%;
@@ -145,7 +144,7 @@ div.jhat-show:hover {
 	cursor: pointer;
 }
 
-#jhat-header {
+div.jhat-header {
 	height: 100px;
 	padding: 5px;
 	border: none;
@@ -153,16 +152,16 @@ div.jhat-show:hover {
 	border-bottom: 1px solid #d4d4d4;
 }
 
-#jhat-sum {
+div.jhat-sum {
 	overflow:hidden;
 	margin-top: 7px;
 }
-#jhat-sum-inner {
+div.jhat-sum-inner {
 	width: 150px;
 	float: left;
 }
 
-#jhat-signature {
+.jhat-signature {
 	border: 1px solid transparent;
 	background:transparent ;
 	border: none;
@@ -172,11 +171,11 @@ div.jhat-show:hover {
 	padding: 3px;
 }
 
-#jhat-signature:hover {
+.jhat-signature:hover {
 	border: 1px solid #ededed;
 }
 
-#jhat-signature:focus {
+.jhat-signature:focus {
 	border: 1px solid #ededed;
 	background: #fff;
 }
@@ -193,7 +192,7 @@ div.jhat-show:hover {
 	cursor: pointer;
 }
 
-#jhat-list-content {
+.jhat-list-content {
 	overflow:hidden;
 	height: 465px;
 }
@@ -238,16 +237,19 @@ div.jhat-dialogue {
 	height: 450px;
 	box-shadow: 0px 0px 25px 0px rgb(228, 228, 228);
 }
-div.jhat-dialogue .jhat-dialogue-info {
-	height: 100px;
-	border-top: none;
-	border-left: none;
-	border-top: none;
-	border-radius: 6px 6px 0px 0px; 
-	-webkit-border-radius: 6px 6px 0px 0px; 
-	-moz-border-radius: 6px 6px 0px 0px; 
-	-o-border-radius: 6px 6px 0px 0px; 
-	-ms-border-radius: 6px 6px 0px 0px; 
+div.jhat-dialogue div.jhat-header {
+	height: 80px;
+}
+div.jhat-dialogue .jhat-sum-inner {
+	width: 80%;
+}
+div.jhat-dialogue .jhat-signature {
+	width: 87%;
+	height: 13px;
+	overflow: hidden;
+}
+div.jhat-dialogue .jhat-signature:hover {
+	border: none;
 }
 div.jhat-dialogue .jhat-type textarea {
 	bottom: 0px;
@@ -256,7 +258,9 @@ div.jhat-dialogue .jhat-type textarea {
 	border: none;
 	border-top: 1px solid #ededed;
 	height: 80px;
+	font-size: 16px;
 }
 div.jhat-dialogue .jhat-display  {
-	height: 257px;
+	height: 266px;
+	background-color: transparent;
 }
