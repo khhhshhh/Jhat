@@ -219,6 +219,7 @@ li.jhat-contact-item:hover {
 	width: 50px;
 	border-radius: 6px;
 	margin-top: 5px;
+	border: 2px solid #ededed;
 }
 .jhat-contact-name  a{
 	font-size:12px;
@@ -236,6 +237,7 @@ div.jhat-dialogue {
 	width: 550px;
 	height: 450px;
 	box-shadow: 0px 0px 25px 0px rgb(228, 228, 228);
+	opacity: 0.9;
 }
 div.jhat-dialogue div.jhat-header {
 	height: 80px;
@@ -263,4 +265,34 @@ div.jhat-dialogue .jhat-type textarea {
 div.jhat-dialogue .jhat-display  {
 	height: 266px;
 	background-color: transparent;
+	overflow:auto;
+}
+div.jhat-dialogue ul.jhat-records {
+	font-size: 13px;
+}
+.jhat-record-item {
+	margin-bottom: 10px;
+	padding: 5px;
+	overflow: hidden;
+}
+.jhat-record-item img {
+	width: 35px;
+	height:: 40px;
+}
+.jhat-record-item p {
+	background: #fff;
+	min-width: 40%;
+	min-height: 35px;
+	padding: 5px;
+	margin: 0px 20px;
+	border: 1px solid #ededed;
+	font-size:13px;
+}
+.jhat-record-other img ,
+.jhat-record-other p {
+	float: left;
+}
+.jhat-record-self img ,
+.jhat-record-self p {
+	float: right;
 }

@@ -39,6 +39,20 @@ div.jhat-dialogue.jhat-transparent.jhat-radius
                 div.jhat-signature(title='#{user.signature || ''}') #{user.signature || ''}
     div.jhat-display
         ul.jhat-records
-            li.jhat-record-item
+            li.jhat-record-item.jhat-record-other
+                img.jhat-contact-avatar(src='/img/avatar/#{user._id}#{user.extName}')
+                p.jhat-radius 发可有
+            li.jhat-record-item.jhat-record-self
+                img.jhat-contact-avatar(src='/img/avatar/#{user._id}#{user.extName}')
+                p.jhat-radius 发可有
+            li.jhat-record-item.jhat-record-other
+                img.jhat-contact-avatar(src='/img/avatar/#{user._id}#{user.extName}')
+                p.jhat-radius 发可有
+            li.jhat-record-item.jhat-record-self
+                img.jhat-contact-avatar(src='/img/avatar/#{user._id}#{user.extName}')
+                p.jhat-radius 发可有
+            li.jhat-record-item.jhat-record-other
+                img.jhat-contact-avatar(src='/img/avatar/#{user._id}#{user.extName}')
+                p.jhat-radius 发可有
     div.jhat-type
         textarea.jhat-bl-radius.jhat-br-radius
