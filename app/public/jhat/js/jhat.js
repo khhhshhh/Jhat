@@ -58,6 +58,15 @@
 		}
 	}); 
 
+	/*Scroll extensions function*/
+	(function($) {
+		$.fn.jhatScroll = function() {
+			this.each(function(i) {
+			});
+			return this;
+		};
+	})($);
+
 	/*Module with cache functions*/
 	var Widget = (function() {
 		/*Cache functions*/
@@ -99,6 +108,7 @@
 	/*Dialogue module, inherit from Widget*/
 	var Dialogue = function(friend) {
 		var dialogue  = Widget($dialogue.clone(true)); 
+		console.log(dialogue.$dom.find('.jhat-scroll').jhatScroll());
 		return dialogue.extend({
 			currendFriend: friend
 		});
