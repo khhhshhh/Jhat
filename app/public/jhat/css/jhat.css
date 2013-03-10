@@ -236,6 +236,7 @@ li.jhat-contact-item:hover {
 }
 
 div.jhat-dialogue {
+	z-index: 99999;
 	top: 10%;
 	left: 33%;
 	width: 550px;

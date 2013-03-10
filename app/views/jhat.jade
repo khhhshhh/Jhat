@@ -16,7 +16,7 @@ div.jhat-box.jhat-transparent.jhat-radius
     div.jhat-list-content.jhat-scroll
         ul.jhat-contact-list.jhat-scroll-inner
             -friends.forEach(function(friend) {
-                li.jhat-contact-item.jhat-radius(_id='#{friend._id}')
+                li.jhat-contact-item.jhat-radius(_id='#{friend._id}', data-info=friend)
                     img.jhat-contact-avatar(src='/img/avatar/#{friend._id}#{friend.extName}')
                     span.jhat-contact-name: a #{friend.name}
             -});

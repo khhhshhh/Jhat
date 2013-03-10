@@ -2,8 +2,8 @@
 
 	/*jhat's global configure settings*/
 	var config = {
-		host: '',
-		port: '',
+		host: 'http://10.0.2.15',
+		port: ':8080',
 		style: '/jhat/css/jhat.css',
 		template: '/jhat/loadTemplate',
 	};
@@ -189,8 +189,8 @@
 		};
 		$.fn.jhatDrag = function(target) {
 			return this.each(function(i) {
-				var $target = $(target)
-				,	$this = $(this)
+				var $this = $(this)
+				,	$target = $this.find(target)
 				,	clientX = 0
 				,	clientY = 0;
 
@@ -264,27 +264,59 @@
 
 	/*Dialogue module, inherit from Widget*/
 	var Dialogue = function(friend) {
-		var dialogue  = Widget($dialogue.clone(true)); 
-		dialogue.$dom.find('.jhat-scroll').jhatScroll({
+		var dialogue  = Widget($dialogue.clone(true))
+		,	$dom = dialogue.$dom
+		,	def = {
+				_id: 'default'
+				,extName: '.jpg'
+				,nickname: 'Default'
+				,signature: 'Not signature'
+			};
+
+		var friend = $.extend({}, def, friend);
+
+		$dom.find('.jhat-scroll').jhatScroll({
 			pace: 8
 		});
-		dialogue.$dom.jhatDrag('div.jhat-bg');
+
+		$dom.jhatDrag('div.jhat-bg');
+		$dom.find('img.jhat-avatar-large')
+			.attr('src', config.url() + '/img/avatar/' + friend._id + friend.extName);
+		$dom.find('div.jhat-signature').text(friend.signature);
+		$dom.find('textarea').data('_id', friend._id);
+		$dom.find('div.jhat-nickname').text(friend.nickname || friend.name);
+		$dom.attr('id', 'jhat-' + friend._id)
+
 		return dialogue.extend({
 			currendFriend: friend
 		});
 	};
 
+	/*display the message on Dialogue*/
+	var showMsg = function() {};
+
 	function init() {
 		widget();
-		var newDialogue = Dialogue();
-		newDialogue.show();
+		showMsg =  initShowMsgFn();
 	};
+
+	function initShowMsgFn() {
+		var $other = $template.filter('li.jhat-record-other');
+		var $self = $template.filter('li.jhat-record-self');
+		return function(dialogue_id, user_id, imgExt, isSelf) {
+			var $dialogue = $('jhat-' + dialogue_id)
+			,	$msg = isSelf ? $self.clone(true) : $other.clone(true);
+			$msg.find('img.jhat-avatar-large').attr('src', '');
+		};
+	};
+
 
 	function widget() {
 		var speed = 200
 		,	$show = $template.filter('div.jhat-show').appendTo($body)
 		,	$box = $template.filter('div.jhat-box').appendTo($body)
-		,	$hide = $box.find('li.jhat-icon-hide');
+		,	$hide = $box.find('li.jhat-icon-hide')
+		,	zIndex = 99999;
 
 		$box.find('div.jhat-list-content').jhatScroll({pace: 9});
 
@@ -355,6 +387,33 @@
 		$hide.on('click', function(event) {
 			$box.disappear();
 			$show.display();
+		});
+
+		/*click on the avatar, init a new dialogue */
+		$box.find('li.jhat-contact-item').on('dblclick', function(event) {
+			var $this = $(this);
+			if($this.data('dialogue')) {
+				$this.data('dialogueObj').show();
+				return;
+			} else {
+				var newDialogue = new Dialogue( 
+					JSON.parse($this.attr('data-info'))
+				).show();
+				newDialogue.$dom.click();
+				$this.data('dialogueObj', newDialogue);
+				$this.data('dialogue', true);
+			}
+		});
+
+		/* dialogue z-index*/
+		$body.on('mousedown', 'div.jhat-widget', function(event) {
+			event.stopPropagation();
+			$(this).css('z-index', ++zIndex);
+		});
+
+		$body.on('click', 'div.jhat-dialogue li.jhat-icon-hide', function(event) {
+			event.stopPropagation();
+			$(this).parents('div.jhat-dialogue').fadeOut(200);
 		});
 
 		$show.click();
