@@ -58,13 +58,116 @@
 		}
 	}); 
 
-	/*Scroll extensions function*/
+	/*Scroll plugin function*/
 	(function($) {
-		$.fn.jhatScroll = function() {
-			this.each(function(i) {
-			});
-			return this;
+
+		var def = {
+			pace: 2.5
 		};
+
+
+		$.fn.jhatScroll = function(options) {
+			var settings = $.extend({}, def, options);
+			var pace = settings.pace;
+
+			this.each(function(i) {
+				var $this = $(this)
+				,	$scrollbar = $('<div class="jhat-scrollbar"></div>')
+				,	$scrollInner = $this.find('.jhat-scroll-inner')
+				,	clientY = 0;
+
+				$this.append($scrollbar);
+
+				$this.hover(function(event) {
+					$scrollbar.stop(true, true).fadeIn(200);
+				}, function(event) {
+					$scrollbar.stop(true, true).fadeOut(200);
+				});
+
+				function scrolling($outer, pace, dirct) {
+					/* My wired algorithm, 
+					 * It's to wired too explain it.
+					 * */
+					var $that = this
+					,	$other = ($that == $scrollbar ? $scrollInner : $scrollbar)  	
+					,	top = $that.position().top
+				    ,	bottom = $outer.height() - $that.height() || -1
+				    ,	newTop = 0
+					,	otherBottom = $outer.height() - $other.height()
+					,	newOtherTop = 0
+					,	dist = 0;
+
+					/*restrict the scrolling area*/
+					newTop = top + pace;
+					dist = (bottom - newTop) * dirct;
+					if(dist < 0) {
+						newTop = bottom; 
+					} else if(dist > bottom * dirct) {
+						newTop = 0;
+					} 
+					$that.css({top: newTop + 'px'});
+
+					/*Coordinate with the other*/
+					newOtherTop =  (newTop / bottom) * otherBottom;
+					$other.css({top: newOtherTop + 'px'});
+				}; 
+
+				$this.on('mousewheel DOMMouseScroll', function(event) {
+					event.preventDefault();
+					var scrollTo = 0
+				    ,	top = $scrollInner.position().top
+				    ,	outerHeight = $this.height()	
+					,	innerHeight = $scrollInner.height()
+				    ,	newTop = 0
+					,	bottom = outerHeight - innerHeight
+					,	scrollbarBottom = outerHeight - $scrollbar.height()
+					,	scrollbarTop = 0;
+
+					/* get the mousewheel dirction, and calculate the pace(px) per scroll*/
+					if (event.type == 'mousewheel') {
+						scrollTo = (event.originalEvent.wheelDelta / 30 * -1 * pace);
+					}
+					else if (event.type == 'DOMMouseScroll') {
+						scrollTo = event.originalEvent.detail * pace;
+					}
+
+					/* scroll the inner page*/
+					scrolling.call($scrollInner, $this, -scrollTo, -1);
+				});
+
+				/* How the mouse control the scrollbar*/
+				function mousemove(event) {
+					event.preventDefault();
+					event.stopPropagation();
+
+					var dist = event.clientY - clientY
+					,	$that = $(this)
+					,	top = $scrollbar.position().top;
+
+					clientY = event.clientY; 
+
+					//$scrollbar.css({top: top + dist + 'px'});
+					scrolling.call($scrollbar, $this, dist, 1);
+
+				}; 
+
+				$scrollbar.on('mousedown', function(event) {
+					event.preventDefault();
+					clientY = event.clientY;
+					$this.on('mousemove', mousemove);
+				});
+
+				$(document.body).on('mouseup', function(event) {
+					$this.off('mousemove', mousemove);
+					scrolling.call($scrollInner, $this, 0, -1);
+				});
+
+			});
+
+			return this;
+
+		};
+
 	})($);
 
 	/*Module with cache functions*/
@@ -108,7 +211,9 @@
 	/*Dialogue module, inherit from Widget*/
 	var Dialogue = function(friend) {
 		var dialogue  = Widget($dialogue.clone(true)); 
-		console.log(dialogue.$dom.find('.jhat-scroll').jhatScroll());
+		dialogue.$dom.find('.jhat-scroll').jhatScroll({
+			pace: 8
+		});
 		return dialogue.extend({
 			currendFriend: friend
 		});
@@ -122,9 +227,11 @@
 
 	function widget() {
 		var speed = 200
-			,$show = $template.filter('div.jhat-show').appendTo($body)
-			,$box = $template.filter('div.jhat-box').appendTo($body)
-			,$hide = $box.find('li.jhat-icon-hide');
+		,	$show = $template.filter('div.jhat-show').appendTo($body)
+		,	$box = $template.filter('div.jhat-box').appendTo($body)
+		,	$hide = $box.find('li.jhat-icon-hide');
+
+		$box.find('div.jhat-list-content').jhatScroll({pace: 9});
 
 		$show.extend({
 			display: function() {
@@ -169,8 +276,8 @@
 		 * */
 		$box.find('input.jhat-signature')
 			.on('blur', function(event) {
-			var $this = $(this);
-			var signature = $this.val();
+			var $this = $(this)
+			,	signature = $this.val();
 
 			$this.attr('title', signature);
 

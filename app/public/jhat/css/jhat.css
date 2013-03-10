@@ -84,7 +84,7 @@ div.jhat-box {
 	position:fixed;
 	top: 2%;
 	right: -245px;
-	width: 250px;
+	width: 260px;
 	height: 95%;
 	max-height: 700px;
 	opacity: 0.9;
@@ -194,7 +194,7 @@ div.jhat-sum-inner {
 
 .jhat-list-content {
 	overflow:hidden;
-	height: 465px;
+	height: 405px;
 }
 
 li.jhat-contact-item {
@@ -265,18 +265,19 @@ div.jhat-dialogue .jhat-type textarea {
 div.jhat-dialogue .jhat-display  {
 	height: 300px;
 	background-color: transparent;
+	overflow: hidden;
 }
 div.jhat-dialogue ul.jhat-records {
 	font-size: 13px;
 }
 .jhat-record-item {
-	margin-bottom: 10px;
-	padding: 5px;
+	margin: 10px 0px 10px 0px;
+	padding: 5px 15px 5px 15px;
 	overflow: hidden;
 }
 .jhat-record-item img {
 	width: 35px;
-	height:: 40px;
+	height: 35px;
 }
 .jhat-record-item p {
 	background: #fff;
@@ -299,8 +300,24 @@ div.jhat-dialogue ul.jhat-records {
 /* Jhat-scrollbar 
  * ___________________________________________________________________*/
 .jhat-scroll {
-};
+	position: relative;
+}
 .jhat-scroll .jhat-scroll-inner {
+	position: absolute;
+	min-height: 100%;
+	top: 0px;
+	left: 0px;
+	overflow: hidden;
 }
 .jhat-scrollbar {
-};
+	display:none;
+	position:absolute;
+	height: 50px;
+	width: 10px;
+	top: 0px;
+	right: 0px;
+	opacity: 0.5;
+	background: #fff;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+}
