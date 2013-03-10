@@ -30,10 +30,10 @@
 
 	/*global variables*/
 	var $body = $(document.body)
-	  , $style = $('<link>') // jhat's css style 
-      , $template = null // jhat's dom template
-	  , speed = 500
-	  , $dialogue = null; // dialogue template, will init when $template is load
+	,	$style = $('<link>') // jhat's css style 
+	, 	$template = null // jhat's dom template
+	, 	speed = 500
+	, 	$dialogue = null; // dialogue template, will init when $template is load
 
 	/*Load style*/
 	$style.attr({
@@ -91,8 +91,8 @@
 					var $that = this
 					,	$other = ($that == $scrollbar ? $scrollInner : $scrollbar)  	
 					,	top = $that.position().top
-				    ,	bottom = $outer.height() - $that.height() || -1
-				    ,	newTop = 0
+					,	bottom = $outer.height() - $that.height() || -1
+					,	newTop = 0
 					,	otherBottom = $outer.height() - $other.height()
 					,	newOtherTop = 0
 					,	dist = 0;
