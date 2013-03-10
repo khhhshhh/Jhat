@@ -2,8 +2,8 @@
 
 	/*jhat's global configure settings*/
 	var config = {
-		host: 'http://localhost',
-		port: ':8080',
+		host: '',
+		port: '',
 		style: '/jhat/css/jhat.css',
 		template: '/jhat/loadTemplate',
 	};

@@ -6,7 +6,8 @@
 *[class^='jhat-'] {
 	padding: 0px;
 	margin: 0px;
-	font: 16px "Helvetica Neue",Helvetica,STheiti,微软雅黑,黑体,Arial,Tahoma,sans-serif,serif;
+	font-family: "Helvetica Neue",Helvetica,STheiti,微软雅黑,黑体,Arial,Tahoma,sans-serif,serif;
+	font-size: 16px;
 	color: #555;
 }
 
@@ -194,7 +195,9 @@ div.jhat-sum-inner {
 
 .jhat-list-content {
 	overflow:hidden;
-	height: 405px;
+	height: calc(100% - 116px);
+	height: -moz-calc(100% - 116px);
+	height: -webkit-calc(100% - 116px);
 }
 
 li.jhat-contact-item {
