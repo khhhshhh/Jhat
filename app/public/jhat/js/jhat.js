@@ -157,7 +157,7 @@
 					$this.on('mousemove', mousemove);
 				});
 
-				$(document.body).on('mouseup', function(event) {
+				$body.on('mouseup', function(event) {
 					$this.off('mousemove', mousemove);
 					scrolling.call($scrollInner, $this, 0, -1);
 				});
@@ -168,6 +168,44 @@
 
 		};
 
+	})($);
+
+	/*Jhat's drag plugin*/
+	(function($) {
+		$.fn.jhatDrag = function(target) {
+			return this.each(function(i) {
+				var $target = $(target)
+				,	$this = $(this)
+				,	clientX = 0
+				,	clientY = 0;
+
+				function drag(event) {
+					var distX = event.clientX - clientX
+					,	distY = event.clientY - clientY
+					,	position = $this.position();
+
+					clientX = event.clientX;
+					clientY = event.clientY;
+
+					$this.css({
+						'top' : position.top - $body.scrollTop() + distY + 'px',
+						'left' : position.left - $body.scrollLeft() + distX + 'px' 
+					});
+				};
+
+				$target.on('mousedown', function(event) {
+					event.preventDefault();
+					clientX = event.clientX;
+					clientY = event.clientY;
+					$body.on('mousemove', drag);
+				});
+
+				$body.on('mouseup', function(event) {
+					$body.off('mousemove', drag);
+				});
+
+			});
+		};  
 	})($);
 
 	/*Module with cache functions*/
@@ -214,6 +252,7 @@
 		dialogue.$dom.find('.jhat-scroll').jhatScroll({
 			pace: 8
 		});
+		dialogue.$dom.jhatDrag('div.jhat-bg');
 		return dialogue.extend({
 			currendFriend: friend
 		});
