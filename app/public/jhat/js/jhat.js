@@ -172,6 +172,21 @@
 
 	/*Jhat's drag plugin*/
 	(function($) {
+		/* 兼容浏览器 */
+		function getOffset() {
+			return {
+				y: window.pageOffsetY 
+				|| document.documentElement.scrollTop 
+				|| document.body.scrollTop
+				|| 0,
+
+				x: window.pageOffsetX 
+				|| document.documentElement.scrollLeft 
+				|| document.body.scrollLeft
+				|| 0,
+				
+			}; 
+		};
 		$.fn.jhatDrag = function(target) {
 			return this.each(function(i) {
 				var $target = $(target)
@@ -182,14 +197,15 @@
 				function drag(event) {
 					var distX = event.clientX - clientX
 					,	distY = event.clientY - clientY
-					,	position = $this.position();
+					,	position = $this.position()
+					,	offset = getOffset();
 
 					clientX = event.clientX;
 					clientY = event.clientY;
 
 					$this.css({
-						'top' : position.top - $body.scrollTop() + distY + 'px',
-						'left' : position.left - $body.scrollLeft() + distX + 'px' 
+						'top' : position.top - offset.y + distY + 'px',
+						'left' : position.left - offset.x + distX + 'px' 
 					});
 				};
 
@@ -296,7 +312,7 @@
 			},
 			disappear: function() {
 				$(this).animate({
-					right: '-245px'
+					right: '-' + ($(this).width() - 5) + 'px'
 				}, speed);
 			},
 			destory: function() {
