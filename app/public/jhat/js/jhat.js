@@ -115,10 +115,10 @@
 				$this.on('mousewheel DOMMouseScroll', function(event) {
 					event.preventDefault();
 					var scrollTo = 0
-				    ,	top = $scrollInner.position().top
-				    ,	outerHeight = $this.height()	
+					,	top = $scrollInner.position().top
+					,	outerHeight = $this.height()	
 					,	innerHeight = $scrollInner.height()
-				    ,	newTop = 0
+					,	newTop = 0
 					,	bottom = outerHeight - innerHeight
 					,	scrollbarBottom = outerHeight - $scrollbar.height()
 					,	scrollbarTop = 0;

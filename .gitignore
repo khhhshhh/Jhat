@@ -8,6 +8,12 @@ lib-cov
 *.gz
 *.swp
 *.~
+*.swo
+1
+2
+3
+]
+[
 
 pids
 logs
