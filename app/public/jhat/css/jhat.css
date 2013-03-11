@@ -269,7 +269,7 @@ div.jhat-dialogue .jhat-type textarea {
 }
 div.jhat-dialogue .jhat-display  {
 	height: 300px;
-	background-color: transparent;
+	background-color: #f9f9f9;
 	overflow: hidden;
 }
 div.jhat-dialogue ul.jhat-records {

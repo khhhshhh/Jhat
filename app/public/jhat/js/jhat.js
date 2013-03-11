@@ -1,14 +1,21 @@
 (function() {
+	/*Who you are*/
+	var me = '';
 
 	/*jhat's global configure settings*/
 	var config = {
-		host: 'http://10.0.2.15',
-		port: ':8080',
-		style: '/jhat/css/jhat.css',
-		template: '/jhat/loadTemplate',
+		host: 'http://10.0.2.15'
+		, port: ':8080'
+		, style: '/jhat/css/jhat.css'
+		, template: '/jhat/loadTemplate'
+		, avatarDir: '/img/avatar/'
 	};
+
 	config.url = function() {
 		return this.host + this.port;
+	};
+	config.avatar = function() {
+		return this.url() + this.avatarDir;
 	};
 
 
@@ -50,6 +57,12 @@
 		dateType: 'text/html',
 		success: function(data) {
 			$template = $(data);
+
+			var myInfo = $template.filter('div.jhat-box:eq(0)').attr('data-me');
+			myInfo = JSON.parse(myInfo);
+			me = myInfo._id;
+			userManager.set(myInfo);
+
 			$dialogue = $template.filter('div.jhat-dialogue');
 			init();
 		},  
@@ -262,9 +275,16 @@
 		};
 	})(); 
 
-	/*Dialogue module, inherit from Widget*/
+	/* Dialogue module, inherit from Widge 
+	 * Never destory a Dialogue throught: 
+	 *      dialogue.destory();
+	 * it will cause the dialgManager will hold the obj
+	 * you're should destory a Dialogue like this : 
+	 * 	    dialgManager.destory(id);
+     */
 	var Dialogue = function(friend) {
 		var dialogue  = Widget($dialogue.clone(true))
+		,	id= friend._id
 		,	$dom = dialogue.$dom
 		,	def = {
 				_id: 'default'
@@ -281,16 +301,72 @@
 
 		$dom.jhatDrag('div.jhat-bg');
 		$dom.find('img.jhat-avatar-large')
-			.attr('src', config.url() + '/img/avatar/' + friend._id + friend.extName);
+			.attr('src', config.avatar() + friend._id + friend.extName);
 		$dom.find('div.jhat-signature').text(friend.signature);
 		$dom.find('textarea').data('_id', friend._id);
 		$dom.find('div.jhat-nickname').text(friend.nickname || friend.name);
 		$dom.attr('id', 'jhat-' + friend._id)
 
 		return dialogue.extend({
-			currendFriend: friend
+			_id: friend._id,
+		    createItsMsg: function(msg) {
+				showMsg.call($dom, id, msg, false);
+			},
+			createMyMsg: function(msg) {
+				console.log(me);
+				showMsg.call($dom, me, msg, true);
+			}
 		});
 	};
+
+	/* Dialogue Manager
+	 * All operations are running around "id"
+	 * ,*/
+	var dialgManager = (function() {
+		var dialogues = [];
+		return {
+			set: function(obj) {
+				return (dialogues[obj._id] = Dialogue(obj));
+			},
+			get: function(id) {
+				return dialogues[id];
+			},
+			destory: function(id) {
+				dialogue[id].destory();
+				delete dialogue[id];
+			}
+		};
+	})();
+
+	var userManager = (function() {
+		var users = []; 
+		return {
+			me: me,
+			set: function(obj, id) {
+				if(id) {
+					users[id] = obj;
+				} else {
+					users[obj._id] = obj;
+				}
+			},
+			get: function(id) {
+				return users[id];
+			},
+			getExt: function(id) {
+				return users[id].extName;
+			},
+			getImg: function(id) {
+				var user = users[id]; 
+				return user._id + user.extName;
+			},
+			getEmail: function(id) {
+				return user[id].email;
+			},
+			getProfile: function() {
+				return user[id].profile;
+			}
+		};
+	})();
 
 	/*display the message on Dialogue*/
 	var showMsg = function() {};
@@ -300,13 +376,26 @@
 		showMsg =  initShowMsgFn();
 	};
 
+	/* inint the showMsg function: called as showMsg.call($this, ....);
+	 * userId: who send the messag
+	 * imgExt: user's img extend name (e.g '.jpg')
+	 * content: the message to be shown
+	 * isSelf: boolean, true->the message will show on the right,
+	 *         else will show on the right
+	 * */
 	function initShowMsgFn() {
 		var $other = $template.filter('li.jhat-record-other');
 		var $self = $template.filter('li.jhat-record-self');
-		return function(dialogue_id, user_id, imgExt, isSelf) {
-			var $dialogue = $('jhat-' + dialogue_id)
-			,	$msg = isSelf ? $self.clone(true) : $other.clone(true);
-			$msg.find('img.jhat-avatar-large').attr('src', '');
+		return function(userId, content, isSelf) {
+			var $msg = isSelf ? $self.clone(true) : $other.clone(true)
+				$this = this;
+
+			$msg.find('img.jhat-contact-avatar')
+				.attr('src', config.avatar() + userManager.getImg(userId));
+			$msg.find('p').text(content);
+
+			$this.find('ul.jhat-records').append($msg.show());
+			console.log($msg);
 		};
 	};
 
@@ -391,17 +480,23 @@
 
 		/*click on the avatar, init a new dialogue */
 		$box.find('li.jhat-contact-item').on('dblclick', function(event) {
-			var $this = $(this);
+			var $this = $(this)
+			,	info = JSON.parse($this.attr('data-info'))
+			,	dialogue = null;
 			if($this.data('dialogue')) {
-				$this.data('dialogueObj').show();
+				$('#jhat-' + $this.data('dialogueId')).fadeIn(200);
 				return;
 			} else {
-				var newDialogue = new Dialogue( 
-					JSON.parse($this.attr('data-info'))
-				).show();
-				newDialogue.$dom.click();
-				$this.data('dialogueObj', newDialogue);
+				dialogue = dialgManager.set(info).show(); // register dialogue
+				userManager.set(info); //register user
+
+				$this.data('dialogueId', info._id);
 				$this.data('dialogue', true);
+
+				dialogue.$dom.css('z-index', ++zIndex);
+
+				//dialogue.createItsMsg('fuckyou');
+				//dialogue.createMyMsg('fuckyou');
 			}
 		});
 
