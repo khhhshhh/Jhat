@@ -6,7 +6,8 @@ var express = require('express')
   , http = require('http')
   , mongoose = require('mongoose')
   , path = require('path')
-  ,	settings = require('./settings');
+  ,	settings = require('./settings')
+  , socket = require('./socket.js');
 
 var User = require('./models/user');
 var app = express();
@@ -49,6 +50,8 @@ user(app);
 /*Router of jhat's main chating capility*/
 jhat(app);
 
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
+
+socket(server);

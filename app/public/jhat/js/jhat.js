@@ -1,4 +1,6 @@
 (function() {
+/* Jhat-global
+ * -------------------------------------------------------------------*/
 	/*Who you are*/
 	var me = '';
 
@@ -9,6 +11,7 @@
 		, style: '/jhat/css/jhat.css'
 		, template: '/jhat/loadTemplate'
 		, avatarDir: '/img/avatar/'
+		, socketIO: '/socket.io/socket.io.js'		
 	};
 
 	config.url = function() {
@@ -42,6 +45,9 @@
 	, 	speed = 500
 	, 	$dialogue = null; // dialogue template, will init when $template is load
 
+
+/* Jhat-load
+ * -------------------------------------------------------------------*/
 	/*Load style*/
 	$style.attr({
 		'type': 'text/css',
@@ -71,6 +77,16 @@
 		}
 	}); 
 
+	/*Load socket.io*/
+	var $script = $('<script></script>');
+	$script.attr({
+		type: 'text/javascript',
+		src: config.url() + config.socketIO
+	});
+	$body.append($script);
+
+/* Jhat-plugin 
+ * -------------------------------------------------------------------*/
 	/*Scroll plugin function*/
 	(function($) {
 
@@ -237,15 +253,19 @@
 		};  
 	})($);
 
+/* Jhat-module
+ * -------------------------------------------------------------------*/
 	/*Module with cache functions*/
 	var Widget = (function() {
 		/*Cache functions*/
 		function hide() {
 			this.$dom.fadeOut(speed);
+			this.isShow = false;
 			return this;
 		};
 		function show() {
 			this.$dom.fadeIn(speed);
+			this.isShow = true;
 			return this;
 		};
 		function destory() {
@@ -267,6 +287,7 @@
 			$dom.appendTo($body);
 			return {
 				$dom: $dom, 
+				isShow: false,
 				hide: hide,
 				destory: destory,
 				show: show,
@@ -305,7 +326,19 @@
 		$dom.find('div.jhat-signature').text(friend.signature);
 		$dom.find('textarea').data('_id', friend._id);
 		$dom.find('div.jhat-nickname').text(friend.nickname || friend.name);
-		$dom.attr('id', 'jhat-' + friend._id)
+		$dom.attr('id', 'jhat-' + friend._id);
+		$dom.find('textarea').on('keyup', function(event) {
+			var $this = $(this)
+			,	msg = ''; 
+			if(event.keyCode == 13) {
+				msg = $this.val();
+				if(msg != '') {
+					dialogue.createMyMsg(msg);
+					$this.val('');
+					socket.emit('msg', me, id, msg);
+				}
+			}
+		});
 
 		return dialogue.extend({
 			_id: friend._id,
@@ -333,7 +366,10 @@
 			},
 			destory: function(id) {
 				dialogue[id].destory();
-				delete dialogue[id];
+				delete dialogues[id];
+			},
+			has: function(id) {
+				return (dialogues[id] !== undefined);
 			}
 		};
 	})();
@@ -368,13 +404,46 @@
 		};
 	})();
 
+	var msgManager = (function() {
+		/* Use to cache the unread msg, id to an array*/
+		var msgCache = [];
+		return {
+			sendFrom: function(fromId, msg) {
+				var dialogue = dialgManager.get(fromId);
+				if(dialogue && dialogue.isShow) {
+					dialogue.createItsMsg(msg);
+				} else {
+					var msgs = msgCache[fromId] || [];
+					msgs.push(msg);
+					shaker.shake(fromId);
+				};
+			},
+			pullMsg: function(id) {
+					shaker.stop(id);
+					var msgs = msgCache[id]
+					,	dialogue = dialgManager.get(id);
+					if(msgs) {
+						for(var i = 0, len = msgs.length; i < len; i++) {
+							dialogue.createItsMsg(msgs[i]);
+						}
+					}
+			} 
+		};
+	})();
+
+	var shaker = {
+		shake: function(fromId) {
+			console.log('start shake' + fromId);
+		},
+		stop: function(fromId) {
+			console.log('stop shake' + fromId);
+		}
+	};
+
+/* Jhat-privataFn
+ * -------------------------------------------------------------------*/
 	/*display the message on Dialogue*/
 	var showMsg = function() {};
-
-	function init() {
-		widget();
-		showMsg =  initShowMsgFn();
-	};
 
 	/* inint the showMsg function: called as showMsg.call($this, ....);
 	 * userId: who send the messag
@@ -399,6 +468,32 @@
 		};
 	};
 
+
+/* Jhat-initFn
+ * -------------------------------------------------------------------*/
+	function init() {
+		widget();
+		showMsg =  initShowMsgFn();
+		initSocket();
+	};
+
+	/*A global socket object, I can use it everywhere inside the closure*/
+	var socket = null;
+
+	function initSocket() {
+
+		socket = io.connect(config.url());
+
+		/*save the socke on server*/
+		socket.on('connect', function() {
+			socket.emit('connect', me);
+		});
+
+		/*get a message an display it*/
+		socket.on('msg', function(fromId, toId, msg) {
+			msgManager.sendFrom(fromId, msg);
+		});
+	};
 
 	function widget() {
 		var speed = 200
@@ -484,7 +579,9 @@
 			,	info = JSON.parse($this.attr('data-info'))
 			,	dialogue = null;
 			if($this.data('dialogue')) {
-				$('#jhat-' + $this.data('dialogueId')).fadeIn(200);
+				var id = $this.data('dialogueId');
+				$('#jhat-' + id).fadeIn(200).css('z-index', ++zIndex);
+				msgManager.pullMsg(id);
 				return;
 			} else {
 				dialogue = dialgManager.set(info).show(); // register dialogue
@@ -494,9 +591,7 @@
 				$this.data('dialogue', true);
 
 				dialogue.$dom.css('z-index', ++zIndex);
-
-				//dialogue.createItsMsg('fuckyou');
-				//dialogue.createMyMsg('fuckyou');
+				msgManager.pullMsg(info._id);
 			}
 		});
 

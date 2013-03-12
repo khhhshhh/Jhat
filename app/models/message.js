@@ -19,4 +19,4 @@ var messageSchema = new Schema({
 				   // 1. sent 2.unsent 	 
 });
 
-module.exports = mongoose('message', messageSchema); 
+module.exports = mongoose.model('message', messageSchema); 
