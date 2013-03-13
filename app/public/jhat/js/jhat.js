@@ -331,12 +331,14 @@
 			var $this = $(this)
 			,	msg = ''; 
 			if(event.keyCode == 13) {
-				msg = $this.val();
-				if(msg != '') {
+				msg = $this.val().trim();
+				msg.replace(/(^\s*)|(\s*$)/g, "");
+				if(msg != '' && msg != '\n') {
+					console.log(msg);
 					dialogue.createMyMsg(msg);
-					$this.val('');
 					socket.emit('msg', me, id, msg);
 				}
+				$this.val('');
 			}
 		});
 
@@ -457,14 +459,16 @@
 		var $self = $template.filter('li.jhat-record-self');
 		return function(userId, content, isSelf) {
 			var $msg = isSelf ? $self.clone(true) : $other.clone(true)
-				$this = this;
+			,	$this = this
+			,	$scroller = $this.find('ul.jhat-records')
+			,	$outer = $this.find('div.jhat-scroll');
 
 			$msg.find('img.jhat-contact-avatar')
 				.attr('src', config.avatar() + userManager.getImg(userId));
 			$msg.find('p').text(content);
 
-			$this.find('ul.jhat-records').append($msg.show());
-			console.log($msg);
+			$scroller.append($msg.show());
+			$scroller.css({'top': ($outer.height() - $scroller.height()) + 'px'});
 		};
 	};
 
